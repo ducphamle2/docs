@@ -1,80 +1,210 @@
 ---
-title: "Welcome to Thesis"
-description: "Thesis is a deep AI search platform for DeFi"
+title: "Quickstart"
+description: "Make your first request to one of Thesis's API endpoints"
 ---
 
-Thesis is an AI-powered search engine designed specifically for decentralized finance (DeFi). Our platform provides intelligent search capabilities, conversation management, and comprehensive space information to help you navigate the DeFi ecosystem.
+## Create and setup your API key
 
-## Core Functionalities
+<Card title="Get your Thesis API key" icon="key" horizontal href="https://app.thesis.io/settings" />
 
-Thesis offers three primary API endpoints to power your DeFi search applications:
+<br />
 
-### 1. Create New Conversation for DeFi Search
+## Create a .env file
 
-Start intelligent conversations about DeFi topics using our conversation API.
-
-```bash
-POST /api/v1/integration/conversations
-```
-
-Create new conversation threads that can intelligently search and analyze DeFi protocols, tokens, and market data. Perfect for building chatbots or interactive DeFi research tools.
-
-[View API Documentation →](https://app-be.thesis.io/docs#/conversations/integration_new_conversation_api_v1_integration_conversations_post)
-
-### 2. Query Conversation
-
-Retrieve and continue existing conversations with full context and history.
+Create a `.env` file in your project root and add your API key:
 
 ```bash
-GET /api/v1/integration/conversations/{conversation_id}
+THESIS_SPACE_API_KEY=your api key without quotes
 ```
 
-Access conversation history, search results, and AI insights from previous interactions. Maintain context across multiple queries for deeper DeFi analysis.
+## Make an API request
 
-[View API Documentation →](https://app-be.thesis.io/docs#/conversations/integration_get_conversation_api_v1_integration_conversations__conversation_id__get)
+<Tabs>
+  <Tab title="Python">
 
-### 3. Get Spaces Information
-
-Access comprehensive information about DeFi spaces, protocols, and ecosystems.
+Install the required packages:
 
 ```bash
-GET /api/v1/integration/spaces
+pip install requests python-dotenv
 ```
 
-Retrieve detailed data about DeFi spaces including protocol information, TVL data, governance details, and ecosystem analytics.
+Create a new conversation:
 
-[View Complete Spaces API →](https://app-be.thesis.io/docs#/spaces)
+```python
+import os
+import requests
+from dotenv import load_dotenv
 
-## Get Started
+# Load environment variables
+load_dotenv()
 
-<CardGroup cols={2}>
+def create_conversation():
+    # Get API key from environment
+    api_key = os.getenv("THESIS_SPACE_API_KEY")
+    
+    if not api_key:
+        raise ValueError("Please set THESIS_SPACE_API_KEY environment variable")
+    
+    # API endpoint
+    url = "https://app-be.thesis.io/api/v1/integration/conversations"
+    
+    # Request headers
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    # Request payload
+    data = {
+        "initial_user_msg": "What are the latest trends in DeFi lending protocols?",
+        "research_mode": "deep_research",
+        "system_prompt": "You are a DeFi research assistant that provides comprehensive analysis."
+    }
+    
+    try:
+        print("Creating new conversation...")
+        response = requests.post(url, json=data, headers=headers)
+        
+        if response.status_code == 200:
+            result = response.json()
+            print("Conversation created successfully!")
+            print(f"Conversation ID: {result.get('conversation_id')}")
+            print(f"Status: {result.get('status')}")
+            return result
+        else:
+            print(f"Error {response.status_code}: {response.text}")
+            
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
 
-<Card title="API Playground" icon="play" href="https://app-be.thesis.io/docs">
-  Explore the Thesis API directly in our interactive documentation.
-</Card>
+if __name__ == "__main__":
+    create_conversation()
+```
 
-<Card title="Quickstart" icon="rocket" href="/api-reference/introduction">
-  Use our SDKs to perform your first Thesis DeFi search.
-</Card>
+  </Tab>
+  <Tab title="TypeScript">
 
-<Card title="Integrate with Thesis" icon="code" href="/essentials/code">
-  Enable LLMs to search DeFi data with Thesis integration.
-</Card>
+Install the required packages:
 
-<Card title="Examples" icon="book-open" href="/api-reference/endpoint/get">
-  Learn from our pre-built tutorials and live demos.
-</Card>
+```bash
+npm install axios dotenv
+npm install --save-dev @types/node typescript ts-node
+```
 
-</CardGroup>
+```typescript
+import "dotenv/config";
+import axios, { AxiosResponse } from "axios";
 
-## Key Features
+export interface ConversationRequest {
+  initial_user_msg?: string;
+  research_mode?: string;
+  space_id?: number;
+  space_section_id?: number;
+  thread_follow_up?: number;
+  followup_discover_id?: string;
+  mcp_disable?: Record<string, boolean>;
+  system_prompt?: string;
+  image_urls?: string[];
+}
 
-- **Intelligent DeFi Search**: Advanced AI algorithms trained specifically on DeFi protocols and market data
-- **Conversation Management**: Maintain context across multiple queries for deeper analysis  
-- **Comprehensive Data**: Access to extensive DeFi space information and analytics
-- **Developer-Friendly**: RESTful APIs with comprehensive documentation
-- **Real-Time Insights**: Up-to-date information on DeFi protocols, governance, and market conditions
+export interface ConversationResponse {
+  status: string;
+  conversation_id: string;
+}
 
-<Note>
-  **Ready to start building?** Check out our [API Reference](/api-reference/introduction) or explore the [interactive API documentation](https://app-be.thesis.io/docs).
-</Note>
+export interface ApiError {
+  detail: Array<{
+    type: string;
+    loc: Array<string | number>;
+    msg: string;
+    input: any;
+  }>;
+}
+
+export class ThesisApiClient {
+  private baseUrl =
+    process.env.THESIS_BASE_API_URL || "https://app-be.thesis.io";
+  private apiKey: string;
+
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+
+  async createConversation(
+    request: ConversationRequest
+  ): Promise<ConversationResponse> {
+    console.log("request: ", JSON.stringify(request, null, 2));
+    try {
+      const response: AxiosResponse = await axios.post(
+        `${this.baseUrl}/api/v1/integration/conversations`,
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 422) {
+        const validationError: ApiError = error.response.data;
+        throw new Error(
+          `Validation Error: ${JSON.stringify(validationError.detail)}`
+        );
+      }
+      throw new Error(`API Error: ${error.message}`);
+    }
+  }
+}
+
+async function main() {
+  const token = process.env.THESIS_SPACE_API_KEY;
+
+  if (!token) {
+    console.error("Please set THESIS_SPACE_API_KEY environment variable");
+    process.exit(1);
+  }
+
+  const client = new ThesisApiClient(token);
+
+  const conversationRequest: ConversationRequest = {
+    initial_user_msg:
+      "What are the latest trends in DeFi lending protocols?",
+    research_mode: "deep_research",
+    system_prompt:
+      "You are a DeFi research assistant that provides comprehensive analysis.",
+  };
+
+  try {
+    console.log("Creating new conversation...");
+    const result = await client.createConversation(conversationRequest);
+    console.log("Conversation created successfully!");
+    console.log(`Conversation ID: ${result.conversation_id}`);
+    console.log(`Status: ${result.status}`);
+  } catch (error: any) {
+    console.error("Error:", error.message);
+    process.exit(1);
+  }
+}
+
+main();
+```
+
+  </Tab>
+  <Tab title="cURL">
+
+```bash
+curl -X POST 'https://app-be.thesis.io/api/v1/integration/conversations' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "initial_user_msg": "What are the latest trends in DeFi lending protocols?",
+    "research_mode": "deep_research",
+    "system_prompt": "You are a DeFi research assistant that provides comprehensive analysis."
+  }'
+```
+
+  </Tab>
+</Tabs>

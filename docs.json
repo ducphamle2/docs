@@ -15,16 +15,13 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["Overview", "Quickstart"]
+            "pages": ["overview", "quickstart"]
           },
           {
             "group": "API Reference",
             "pages": [
               "api-reference/introduction",
-              "api-reference/create",
-              "api-reference/get",
-              "api-reference/delete",
-              "api-reference/webhook"
+              "api-reference/endpoint/new-conversation"
             ]
           },
           {
