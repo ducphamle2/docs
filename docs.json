@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "willow",
+  "theme": "mint",
   "name": "Thesis",
   "colors": {
-    "primary": "#16A34A",
+    "primary": "#0070FF",
     "light": "#F8F8FF",
     "dark": "#0f172a"
   },
@@ -19,12 +19,7 @@
           },
           {
             "group": "API Reference",
-            "pages": [
-              "api-reference/open-api-specs",
-              "api-reference/endpoint/new-conversation",
-              "api-reference/endpoint/get-conversation",
-              "api-reference/endpoint/get-spaces"
-            ]
+            "openapi": "api-reference/openapi.json"
           },
           {
             "group": "Concepts",
@@ -66,7 +61,7 @@
         {
           "anchor": "Telegram",
           "href": "https://t.me/thesis_io",
-          "icon": "paper-airplane"
+          "icon": "telegram"
         }
       ]
     }
