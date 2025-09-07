@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "#0070FF",
   "name": "Thesis",
   "colors": {
     "primary": "#16A34A",
-    "light": "#FFFFFF",
-    "dark": "#15803D"
+    "light": "#F8F8FF",
+    "dark": "#0f172a"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -15,31 +15,20 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["overview", "quickstart"]
+            "pages": ["index", "quickstart"]
           },
           {
             "group": "API Reference",
             "pages": [
-              "api-reference/introduction",
-              "api-reference/endpoint/new-conversation"
+              "api-reference/open-api-specs",
+              "api-reference/endpoint/new-conversation",
+              "api-reference/endpoint/get-conversation",
+              "api-reference/endpoint/get-spaces"
             ]
           },
           {
             "group": "Concepts",
-            "pages": [
-              "concepts/markdown",
-              "concepts/code",
-              "concepts/images",
-              "concepts/reusable-snippets"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "integrations/cursor",
-              "integrations/windsurf",
-              "integrations/claude"
-            ]
+            "pages": ["concepts/how-thesis-works", "concepts/faqs"]
           }
         ]
       },
@@ -61,7 +50,7 @@
       "anchors": [
         {
           "anchor": "API Status",
-          "href": "https://status.thesis.io",
+          "href": "https://app-be.thesis.io/docs",
           "icon": "chart-line"
         },
         {
@@ -88,6 +77,10 @@
   },
   "navbar": {
     "links": [
+      {
+        "label": "Thesis Research",
+        "href": "https://app.thesis.io"
+      },
       {
         "label": "Support",
         "href": "https://t.me/thesis_io"
