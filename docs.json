@@ -73,18 +73,18 @@
   "navbar": {
     "links": [
       {
-        "label": "Thesis Research",
-        "href": "https://app.thesis.io"
-      },
-      {
         "label": "Support",
         "href": "https://t.me/thesis_io"
+      },
+      {
+        "label": "Dashboard",
+        "href": "https://app.thesis.io/settings"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.thesis.io/settings"
+      "label": "Main Site",
+      "href": "https://app.thesis.io"
     }
   },
   "contextual": {
