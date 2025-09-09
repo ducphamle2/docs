@@ -36,7 +36,7 @@
           },
           {
             "group": "Tutorials",
-            "pages": ["examples/tutorials/hello-world"]
+            "pages": ["examples/tutorials/hello-world", "examples/tutorials/join-conversation"]
           }
         ]
       }
